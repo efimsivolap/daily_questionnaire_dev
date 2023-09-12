@@ -1,7 +1,12 @@
+import 'package:daily_questionnaire_test/domain/question_model.dart';
+import 'package:daily_questionnaire_test/domain/quiestions_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuestionsPage extends StatelessWidget {
-  final List<String> questions = [
+  const QuestionsPage({super.key});
+
+  static const List<String> questions = [
     'How was your breakfast?',
     'Did you sleep well?',
     'Did you enjoy your morning walk?',
@@ -15,50 +20,55 @@ class QuestionsPage extends StatelessWidget {
         '${_getMonthAbbreviation(todayDate)} ${_getDayWithSuffix(todayDate)}, ${todayDate.year}, ${_getWeekday(todayDate)}';
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 70),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Daily Questionnaire',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 32,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 0.62,
-                  ),
+      body: BlocBuilder<QuestionsCubit, List<QuestionModel>>(
+        builder: (context, questionsCubit) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 70),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Daily Questionnaire',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 32,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        height: 0.62,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        height: 1.43,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  formattedDate,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    height: 1.43,
-                  ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: questions.length,
+                  itemBuilder: (context, index) {
+                    final questionNumber = index + 1;
+                    final question = questions[index];
+                    return _buildQuestionCard(
+                        context, questionNumber, question);
+                  },
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: questions.length,
-              itemBuilder: (context, index) {
-                final questionNumber = index + 1;
-                final question = questions[index];
-                return _buildQuestionCard(context, questionNumber, question);
-              },
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -158,7 +168,7 @@ class QuestionsPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(0, 186, 244, 1),
+                        backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
                         textStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,

@@ -1,22 +1,27 @@
-class QuestionModel {
-  final String title;
-  final String? subtitle;
-  final int maxStars;
-  final bool canWriteReview;
+import 'package:flutter/foundation.dart' show immutable;
 
-  QuestionModel({
+@immutable
+class QuestionModel {
+  const QuestionModel({
     required this.title,
     this.subtitle,
     required this.maxStars,
     required this.canWriteReview,
   });
 
+  final String title;
+  final String? subtitle;
+  final int maxStars;
+  final bool canWriteReview;
+
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
-      title: json['title'],
-      subtitle: json['subtitle'],
-      maxStars: json['maxStars'],
-      canWriteReview: json['canWriteReview'] ?? false,
+      title: json['title'] as String,
+      subtitle: json['subtitle'] as String?,
+      maxStars: json['maxStars'] as int,
+      canWriteReview: json['canWriteReview'] as bool,
     );
   }
+
+  // todo: добавить toJson
 }
