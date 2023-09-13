@@ -20,8 +20,8 @@ dev_dependencies:
     sdk: flutter
 
   # todo: заменить в момент релиза
-  flutter_lints: ^2.0.0
-  # lint: ^2.1.2
+#  flutter_lints: ^2.0.0
+  lint: ^2.1.2
 
 flutter:
   uses-material-design: true
