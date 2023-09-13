@@ -8,6 +8,9 @@ class QuestionsRepository {
   const QuestionsRepository();
 
   Future<List<QuestionModel>> getQuestions() async {
+    // имитируем задержку, словно получаем данные из сети
+    Future.delayed(const Duration(seconds: 1));
+
     final String source = await rootBundle.loadString('assets/questions.json');
     final decoded =
         (await json.decode(source) as List).cast<Map<String, dynamic>>();

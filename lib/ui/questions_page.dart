@@ -8,74 +8,91 @@ class QuestionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todayDate = DateTime.now();
-    final formattedDate =
-        '${_getMonthAbbreviation(todayDate)} ${_getDayWithSuffix(todayDate)}, ${todayDate.year}, ${_getWeekday(todayDate)}';
-
     return Scaffold(
-      body: BlocBuilder<QuestionsCubit, List<QuestionModel>>(
-        builder: (context, questionsCubit) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 70),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Daily Questionnaire',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        height: 0.62,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        height: 1.43,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: questionsCubit.length,
-                  itemBuilder: (context, index) {
-                    final question = questionsCubit[index];
-
-                    return QuestionCard(
-                        question: question, questionNumber: index + 1);
-                  },
-                ),
-              ),
-            ],
-          );
+      body: BlocBuilder<QuestionsCubit, QuestionsState>(
+        builder: (context, questionsState) => switch (questionsState) {
+          QuestionsData(data: final data) => QuestionsWidget(questions: data),
+          QuestionsLoading() =>
+            const Center(child: CircularProgressIndicator()),
+          QuestionsError(message: final message) =>
+            Center(child: Text(message)),
         },
       ),
     );
   }
 }
 
-class QuestionCard extends StatelessWidget {
-  final QuestionModel question;
-  final int questionNumber;
+class QuestionsWidget extends StatelessWidget {
+  const QuestionsWidget({super.key, required this.questions});
 
+  final List<QuestionModel> questions;
+
+  @override
+  Widget build(BuildContext context) {
+    final todayDate = DateTime.now();
+    final formattedDate =
+        '${_getMonthAbbreviation(todayDate)} ${_getDayWithSuffix(todayDate)}, ${todayDate.year}, ${_getWeekday(todayDate)}';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 70),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Daily Questionnaire',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 0.62,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                formattedDate,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 1.43,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: questions.length,
+            itemBuilder: (context, index) {
+              final question = questions[index];
+
+              return QuestionCard(
+                question: question,
+                questionNumber: index + 1,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class QuestionCard extends StatelessWidget {
   const QuestionCard({
-    Key? key,
+    super.key,
     required this.question,
     required this.questionNumber,
-  }) : super(key: key);
+  });
+
+  final QuestionModel question;
+  final int questionNumber;
 
   void _showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -130,7 +147,7 @@ class QuestionCard extends StatelessWidget {
                           height: 1.43,
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox.shrink(),
                 const SizedBox(height: 16),
                 _buildRatingStars(),
                 const SizedBox(height: 16),
@@ -176,7 +193,9 @@ class QuestionCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
@@ -201,6 +220,7 @@ class QuestionCard extends StatelessWidget {
     );
   }
 
+  /// todo обязательно в отдельный виджет
   Widget _buildRatingStars() {
     List<Widget> stars = [];
     int maxStars = 8;
@@ -250,7 +270,7 @@ class QuestionCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: Color.fromRGBO(0, 186, 244, 1),
+                  backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
                   child: Text(
                     questionNumber.toString(),
                     style: const TextStyle(
@@ -286,7 +306,7 @@ class QuestionCard extends StatelessWidget {
                                 height: 1,
                               ),
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                     ],
                   ),
                 ),
@@ -331,25 +351,20 @@ class QuestionCard extends StatelessWidget {
   }
 }
 
-String _getMonthAbbreviation(DateTime date) {
-  final monthNames = [
-    '',
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  return monthNames[date.month];
-}
+String _getMonthAbbreviation(DateTime date) => [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec',
+    ][date.month + 1];
 
 String _getDayWithSuffix(DateTime date) {
   final day = date.day;
@@ -357,35 +372,21 @@ String _getDayWithSuffix(DateTime date) {
     return '$day' + 'th';
   }
 
-  switch (day % 10) {
-    case 1:
-      return '$day' + 'st';
-    case 2:
-      return '$day' + 'nd';
-    case 3:
-      return '$day' + 'rd';
-    default:
-      return '$day' + 'th';
-  }
+  return switch (day % 10) {
+    1 => '$day' + 'st',
+    2 => '$day' + 'nd',
+    3 => '$day' + 'rd',
+    _ => '$day' + 'th'
+  };
 }
 
-String _getWeekday(DateTime date) {
-  switch (date.weekday) {
-    case DateTime.monday:
-      return 'Monday';
-    case DateTime.tuesday:
-      return 'Tuesday';
-    case DateTime.wednesday:
-      return 'Wednesday';
-    case DateTime.thursday:
-      return 'Thursday';
-    case DateTime.friday:
-      return 'Friday';
-    case DateTime.saturday:
-      return 'Saturday';
-    case DateTime.sunday:
-      return 'Sunday';
-    default:
-      return '';
-  }
-}
+String _getWeekday(DateTime date) => switch (date.weekday) {
+      DateTime.monday => 'Monday',
+      DateTime.tuesday => 'Tuesday',
+      DateTime.wednesday => 'Wednesday',
+      DateTime.thursday => 'Thursday',
+      DateTime.friday => 'Friday',
+      DateTime.saturday => 'Saturday',
+      DateTime.sunday => 'Sunday',
+      _ => ''
+    };

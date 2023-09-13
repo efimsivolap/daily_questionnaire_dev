@@ -3,3 +3,4 @@ include: package:lint/strict.yaml
 
 linter:
   rules:
+    prefer_if_elements_to_conditional_expressions: false
