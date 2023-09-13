@@ -23,5 +23,12 @@ class QuestionModel {
     );
   }
 
-  // todo: добавить toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'subtitle': subtitle,
+      'maxStars': maxStars,
+      'canWriteReview': canWriteReview,
+    };
+  }
 }

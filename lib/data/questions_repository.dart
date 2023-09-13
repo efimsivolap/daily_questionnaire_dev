@@ -9,8 +9,10 @@ class QuestionsRepository {
 
   Future<List<QuestionModel>> getQuestions() async {
     final String source = await rootBundle.loadString('assets/questions.json');
-    final data = await json.decode(source) as List<Map<String, dynamic>>;
-    return data.map(QuestionModel.fromJson).toList();
+    final List<Map<String, dynamic>> data =
+        List<Map<String, dynamic>>.from(json.decode(source));
+    print(data);
+    return data.map((e) => QuestionModel.fromJson(e)).toList();
   }
 
   Future<void> postQuestions(List<QuestionModel> questions) async {}

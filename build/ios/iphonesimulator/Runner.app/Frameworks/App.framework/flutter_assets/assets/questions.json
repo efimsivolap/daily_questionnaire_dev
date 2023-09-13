@@ -1,0 +1,25 @@
+[
+    {
+      "title": "How was your breakfast?",
+      "subtitle": "Orange Juice? Toasts? Cereals?",
+      "maxStars": 5,
+      "canWriteReview": true
+    },
+    {
+      "title": "Did you sleep well?",
+      "subtitle": "Was the pillow soft enough?",
+      "maxStars": 8,
+      "canWriteReview": true
+    },
+    {
+      "title": "Did you enjoy your morning walk?",
+      "maxStars": 3,
+      "canWriteReview": false
+    },
+    {
+      "title": "How is the weather today?",
+      "subtitle": "Is it sunny? Rainy? Maybe a sandstorm?!",
+      "maxStars": 5,
+      "canWriteReview": true
+    }
+]
