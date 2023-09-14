@@ -212,7 +212,8 @@ class _QuestionCardState extends State<QuestionCard> {
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        context.read<QuestionsCubit>().postAnswers(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
                       textStyle: const TextStyle(
