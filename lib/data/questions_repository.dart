@@ -1,31 +1,43 @@
 import 'dart:convert';
 
+import 'package:daily_questionnaire_test/domain/question_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import '../domain/question_model.dart';
+abstract interface class QuestionsRepository<T> {
+  Future<T> getQuestions();
+  Future<void> postQuestions(T questions);
+}
 
-class QuestionsRepository {
-  const QuestionsRepository();
+class QuestionsRepositoryImpl
+    implements QuestionsRepository<List<QuestionModel>> {
+  const QuestionsRepositoryImpl();
 
+  @override
   Future<List<QuestionModel>> getQuestions() async {
     // имитируем задержку, словно получаем данные из сети
-    Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     final String source = await rootBundle.loadString('assets/questions.json');
     final decoded =
         (await json.decode(source) as List).cast<Map<String, dynamic>>();
 
-    for (final questionData in decoded) {
-      final maxStars = questionData['maxStars'] as int;
+    final questions = decoded.map(QuestionModel.fromJson).toList();
 
-      if (maxStars > 8 || maxStars < 3) {
-        throw Exception(
-            'Invalid JSON configuration: maxStars should be between 3 and 8 for each question');
-      }
+    if (questions.any(
+      (element) => element.maxStars > 8 || element.maxStars < 3,
+    )) {
+      throw Exception(
+          'Invalid JSON configuration: maxStars should be between 3 and 8 for each question');
+    } else {
+      return questions;
     }
-
-    return decoded.map(QuestionModel.fromJson).toList();
   }
 
-  Future<void> postQuestions(List<QuestionModel> questions) async {}
+  @override
+  Future<void> postQuestions(List<QuestionModel> questions) async {
+    // имитируем отправку, просто выводя в консоль
+    await Future.delayed(const Duration(seconds: 1));
+    // ignore: avoid_print
+    print(questions);
+  }
 }

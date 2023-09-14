@@ -24,13 +24,13 @@ class QuestionsError extends QuestionsState {
 
 class QuestionsCubit extends Cubit<QuestionsState> {
   QuestionsCubit({
-    required QuestionsRepository questionsRepository,
+    required QuestionsRepository<List<QuestionModel>> questionsRepository,
   })  : _questionsRepository = questionsRepository,
         super(const QuestionsLoading()) {
     init();
   }
 
-  final QuestionsRepository _questionsRepository;
+  final QuestionsRepository<List<QuestionModel>> _questionsRepository;
 
   Future<void> init() async {
     try {

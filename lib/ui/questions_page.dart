@@ -1,6 +1,6 @@
 import 'package:daily_questionnaire_test/domain/question_model.dart';
 import 'package:daily_questionnaire_test/domain/quiestions_cubit.dart';
-import 'package:daily_questionnaire_test/utils/data_time.dart';
+import 'package:daily_questionnaire_test/utils/data_time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

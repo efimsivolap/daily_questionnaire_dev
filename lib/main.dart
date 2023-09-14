@@ -9,7 +9,7 @@ void main() {
   runApp(
     BlocProvider<QuestionsCubit>(
       create: (BuildContext context) => QuestionsCubit(
-        questionsRepository: const QuestionsRepository(),
+        questionsRepository: const QuestionsRepositoryImpl(),
       ),
       child: MyApp(),
     ),
