@@ -1,5 +1,6 @@
 import 'package:daily_questionnaire_test/domain/question_model.dart';
 import 'package:daily_questionnaire_test/domain/quiestions_cubit.dart';
+import 'package:daily_questionnaire_test/utils/data_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +32,7 @@ class QuestionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final todayDate = DateTime.now();
     final formattedDate =
-        '${_getMonthAbbreviation(todayDate)} ${_getDayWithSuffix(todayDate)}, ${todayDate.year}, ${_getWeekday(todayDate)}';
+        '${getMonthAbbreviation(todayDate)} ${getDayWithSuffix(todayDate)}, ${todayDate.year}, ${getWeekday(todayDate)}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,14 +86,15 @@ class QuestionsWidget extends StatelessWidget {
 }
 
 class QuestionCard extends StatelessWidget {
-  const QuestionCard({
-    super.key,
+  QuestionCard({
+    Key? key,
     required this.question,
     required this.questionNumber,
-  });
+  }) : super(key: key);
 
   final QuestionModel question;
   final int questionNumber;
+  final TextEditingController answerController = TextEditingController();
 
   void _showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -137,19 +139,18 @@ class QuestionCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                question.subtitle != null
-                    ? Text(
-                        question.subtitle!,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          height: 1.43,
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+                if (question.subtitle != null)
+                  Text(
+                    question.subtitle!,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      height: 1.43,
+                    ),
+                  ),
                 const SizedBox(height: 16),
-                _buildRatingStars(),
+                RatingStars(maxStars: 8, existingStars: question.maxStars),
                 const SizedBox(height: 16),
                 const Text(
                   'Write a review',
@@ -162,6 +163,7 @@ class QuestionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: answerController,
                   maxLines: 10,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -220,35 +222,6 @@ class QuestionCard extends StatelessWidget {
     );
   }
 
-  /// todo обязательно в отдельный виджет
-  Widget _buildRatingStars() {
-    List<Widget> stars = [];
-    int maxStars = 8;
-    int existingStars = question.maxStars;
-
-    for (int i = 1; i <= maxStars; i++) {
-      if (i <= existingStars) {
-        stars.add(
-          const Icon(
-            Icons.star,
-            color: Color.fromRGBO(0, 186, 244, 1),
-            size: 38,
-          ),
-        );
-      } else {
-        stars.add(
-          const Icon(
-            Icons.star,
-            color: Color(0xFFEDEDED),
-            size: 38,
-          ),
-        );
-      }
-    }
-
-    return Row(children: stars);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -295,36 +268,34 @@ class QuestionCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 9),
-                      question.subtitle != null
-                          ? Text(
-                              question.subtitle!,
-                              style: const TextStyle(
-                                color: Color(0xFFC0C0C0),
-                                fontSize: 12,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 1,
-                              ),
-                            )
-                          : const SizedBox(),
+                      if (question.subtitle != null)
+                        Text(
+                          question.subtitle!,
+                          style: const TextStyle(
+                            color: Color(0xFFC0C0C0),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            height: 1,
+                          ),
+                        ),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            _buildRatingStars(),
+            RatingStars(maxStars: 8, existingStars: question.maxStars),
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () => _showModalSheet(context),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Write a review',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFF565656),
                         fontSize: 16,
                         fontFamily: 'Inter',
@@ -332,11 +303,11 @@ class QuestionCard extends StatelessWidget {
                         height: 1,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     IconTheme(
                       data: IconThemeData(
                         size: 16,
-                        color: Color(0xFF565656),
+                        color: const Color(0xFF565656),
                       ),
                       child: Icon(Icons.arrow_forward_ios),
                     ),
@@ -351,42 +322,38 @@ class QuestionCard extends StatelessWidget {
   }
 }
 
-String _getMonthAbbreviation(DateTime date) => [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ][date.month + 1];
+class RatingStars extends StatelessWidget {
+  const RatingStars({
+    Key? key,
+    required this.maxStars,
+    required this.existingStars,
+  }) : super(key: key);
 
-String _getDayWithSuffix(DateTime date) {
-  final day = date.day;
-  if (day >= 11 && day <= 13) {
-    return '$day' + 'th';
+  final int maxStars;
+  final int existingStars;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> stars = [];
+    for (int i = 1; i <= maxStars; i++) {
+      if (i <= existingStars) {
+        stars.add(
+          const Icon(
+            Icons.star,
+            color: Color.fromRGBO(0, 186, 244, 1),
+            size: 38,
+          ),
+        );
+      } else {
+        stars.add(
+          const Icon(
+            Icons.star,
+            color: Color(0xFFEDEDED),
+            size: 38,
+          ),
+        );
+      }
+    }
+    return Row(children: stars);
   }
-
-  return switch (day % 10) {
-    1 => '$day' + 'st',
-    2 => '$day' + 'nd',
-    3 => '$day' + 'rd',
-    _ => '$day' + 'th'
-  };
 }
-
-String _getWeekday(DateTime date) => switch (date.weekday) {
-      DateTime.monday => 'Monday',
-      DateTime.tuesday => 'Tuesday',
-      DateTime.wednesday => 'Wednesday',
-      DateTime.thursday => 'Thursday',
-      DateTime.friday => 'Friday',
-      DateTime.saturday => 'Saturday',
-      DateTime.sunday => 'Sunday',
-      _ => ''
-    };

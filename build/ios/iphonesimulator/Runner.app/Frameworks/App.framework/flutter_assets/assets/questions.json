@@ -8,12 +8,12 @@
     {
       "title": "Did you sleep well?",
       "subtitle": "Was the pillow soft enough?",
-      "maxStars": 8,
+      "maxStars": 7,
       "canWriteReview": true
     },
     {
       "title": "Did you enjoy your morning walk?",
-      "maxStars": 3,
+      "maxStars": 4,
       "canWriteReview": false
     },
     {
