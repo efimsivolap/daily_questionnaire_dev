@@ -85,16 +85,40 @@ class QuestionsWidget extends StatelessWidget {
   }
 }
 
-class QuestionCard extends StatelessWidget {
-  QuestionCard({
-    Key? key,
+class QuestionCard extends StatefulWidget {
+  const QuestionCard({
+    super.key,
     required this.question,
     required this.questionNumber,
-  }) : super(key: key);
+  });
 
   final QuestionModel question;
   final int questionNumber;
-  final TextEditingController answerController = TextEditingController();
+
+  @override
+  State<QuestionCard> createState() => _QuestionCardState();
+}
+
+class _QuestionCardState extends State<QuestionCard> {
+  late final TextEditingController answerController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    answerController = TextEditingController();
+    answerController.addListener(() {
+      context
+          .read<QuestionsCubit>()
+          .changeAnswer(widget.questionNumber, answerController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    answerController.dispose();
+    super.dispose();
+  }
 
   void _showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -130,7 +154,7 @@ class QuestionCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  question.title,
+                  widget.question.title,
                   maxLines: 2,
                   style: const TextStyle(
                     color: Colors.black,
@@ -139,9 +163,9 @@ class QuestionCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                if (question.subtitle != null)
+                if (widget.question.subtitle != null)
                   Text(
-                    question.subtitle!,
+                    widget.question.subtitle!,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -150,7 +174,8 @@ class QuestionCard extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(height: 16),
-                RatingStars(maxStars: 8, existingStars: question.maxStars),
+                RatingStars(
+                    maxStars: 8, existingStars: widget.question.maxStars),
                 const SizedBox(height: 16),
                 const Text(
                   'Write a review',
@@ -245,7 +270,7 @@ class QuestionCard extends StatelessWidget {
                   radius: 16,
                   backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
                   child: Text(
-                    questionNumber.toString(),
+                    widget.questionNumber.toString(),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -259,7 +284,7 @@ class QuestionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        question.title,
+                        widget.question.title,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -268,9 +293,9 @@ class QuestionCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 9),
-                      if (question.subtitle != null)
+                      if (widget.question.subtitle != null)
                         Text(
-                          question.subtitle!,
+                          widget.question.subtitle!,
                           style: const TextStyle(
                             color: Color(0xFFC0C0C0),
                             fontSize: 12,
@@ -284,18 +309,18 @@ class QuestionCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            RatingStars(maxStars: 8, existingStars: question.maxStars),
+            RatingStars(maxStars: 8, existingStars: widget.question.maxStars),
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () => _showModalSheet(context),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Write a review',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF565656),
                         fontSize: 16,
                         fontFamily: 'Inter',
@@ -303,11 +328,11 @@ class QuestionCard extends StatelessWidget {
                         height: 1,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     IconTheme(
                       data: IconThemeData(
                         size: 16,
-                        color: const Color(0xFF565656),
+                        color: Color(0xFF565656),
                       ),
                       child: Icon(Icons.arrow_forward_ios),
                     ),
@@ -324,10 +349,10 @@ class QuestionCard extends StatelessWidget {
 
 class RatingStars extends StatelessWidget {
   const RatingStars({
-    Key? key,
+    super.key,
     required this.maxStars,
     required this.existingStars,
-  }) : super(key: key);
+  });
 
   final int maxStars;
   final int existingStars;

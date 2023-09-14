@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:daily_questionnaire_test/domain/question_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-abstract interface class QuestionsRepository<T> {
-  Future<T> getQuestions();
-  Future<void> postQuestions(T questions);
+abstract interface class QuestionsRepository<Q> {
+  Future<Q> getQuestions();
+  Future<void> postAnswers(dynamic answers);
 }
 
 class QuestionsRepositoryImpl
@@ -34,10 +34,10 @@ class QuestionsRepositoryImpl
   }
 
   @override
-  Future<void> postQuestions(List<QuestionModel> questions) async {
+  Future<void> postAnswers(dynamic answers) async {
     // имитируем отправку, просто выводя в консоль
     await Future.delayed(const Duration(seconds: 1));
     // ignore: avoid_print
-    print(questions);
+    print(answers);
   }
 }

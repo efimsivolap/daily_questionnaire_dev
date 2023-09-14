@@ -41,10 +41,17 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     }
   }
 
-  Future<void> postQuestions(List<QuestionModel> questions) async {
+  final _answers = <String>[];
+
+  void changeAnswer(int index, String text) {
+    _answers[index] = text;
+  }
+
+  Future<void> postAnswers() async {
     emit(const QuestionsLoading());
     try {
-      await _questionsRepository.postQuestions(questions);
+      await _questionsRepository.postAnswers(_answers);
+      _answers.clear();
 
       emit(const QuestionsData([]));
     } catch (e, _) {
