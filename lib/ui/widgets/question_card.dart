@@ -7,10 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuestionCard extends StatefulWidget {
   const QuestionCard({
-    Key? key,
     required this.question,
     required this.questionNumber,
-  }) : super(key: key);
+  });
 
   final QuestionModel question;
   final int questionNumber;
