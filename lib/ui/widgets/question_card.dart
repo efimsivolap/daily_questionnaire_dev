@@ -37,6 +37,7 @@ class _QuestionCardState extends State<QuestionCard> {
 
   @override
   void dispose() {
+    print('dispose');
     answerController.removeListener(_listenerAddAnswer);
     answerController.dispose();
     super.dispose();
@@ -130,33 +131,36 @@ class _QuestionCardState extends State<QuestionCard> {
                     _showModalSheet(context);
                   }
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.question.canWriteReview
-                          ? 'Write a review'
-                          : 'Review is disabled',
-                      style: TextStyle(
-                        color: widget.question.canWriteReview
-                            ? const Color(0xFF565656)
-                            : const Color(0xFFC0C0C0),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        height: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.question.canWriteReview
+                            ? 'Write a review'
+                            : 'Review is disabled',
+                        style: TextStyle(
+                          color: widget.question.canWriteReview
+                              ? const Color(0xFF565656)
+                              : const Color(0xFFC0C0C0),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          height: 1,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    widget.question.canWriteReview
-                        ? const IconTheme(
-                            data: IconThemeData(
-                              size: 16,
-                              color: Color(0xFF565656),
-                            ),
-                            child: Icon(Icons.arrow_forward_ios),
-                          )
-                        : const SizedBox(),
-                  ],
+                      const SizedBox(width: 10),
+                      widget.question.canWriteReview
+                          ? const IconTheme(
+                              data: IconThemeData(
+                                size: 16,
+                                color: Color(0xFF565656),
+                              ),
+                              child: Icon(Icons.arrow_forward_ios),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
                 ),
               ),
             ),

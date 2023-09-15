@@ -112,6 +112,7 @@ class ModalSheetWidget extends StatelessWidget {
                   if (question.canWriteReview) {
                     context.read<QuestionsCubit>().postAnswers();
                   }
+                  Navigator.of(context).maybePop();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
