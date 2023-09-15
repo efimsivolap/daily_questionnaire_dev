@@ -26,15 +26,18 @@ class _QuestionCardState extends State<QuestionCard> {
     super.initState();
 
     answerController = TextEditingController();
-    answerController.addListener(() {
-      context
-          .read<QuestionsCubit>()
-          .changeAnswer(widget.questionNumber, answerController.text);
-    });
+    answerController.addListener(_listenerAddAnswer);
+  }
+
+  void _listenerAddAnswer() {
+    context
+        .read<QuestionsCubit>()
+        .changeAnswer(widget.questionNumber, answerController.text);
   }
 
   @override
   void dispose() {
+    answerController.removeListener(_listenerAddAnswer);
     answerController.dispose();
     super.dispose();
   }
