@@ -1,0 +1,69 @@
+name: Build and Release App
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'release/*'
+
+jobs:
+  build_and_release_android:
+    name: Build and Release Android App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '12.x'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.5.2'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build Android App
+        run: flutter build apk --debug --split-per-abi
+
+      - name: Archive Android Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Android Build
+          path: build/app/outputs/apk/debug/*.apk
+
+  build_ios:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '12.x'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.5.2'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build iOS App
+        run: flutter build ios --debug
+
+      - name: Archive iOS Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: iOS Build
+          path: build/ios/archive/Runner.xcarchive
