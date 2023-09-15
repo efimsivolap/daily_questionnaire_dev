@@ -1,4 +1,4 @@
-name: Build and upload Android app
+name: Build and Upload Android App
 
 on:
   push:
@@ -10,19 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
 
-      - name: Build and package Android app
-        run: ./gradlew assembleRelease
+    - name: Build and package Android app
+      run: |
+        ./gradlew assembleRelease
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Android app
-          path: app/build/outputs/apk/release/app-release.apk
+    - name: Upload APK to GitHub Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Android App
+        path: app/build/outputs/apk/release/app-release.apk
