@@ -1,37 +1,28 @@
-name: Build and Upload Android App
+name: Build and upload Android app
 
 on:
   push:
     branches:
-      - main
-    tags:
-      - 'release/*'
+      - master
 
 jobs:
   build:
-    name: Build Android App
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
           java-version: '11'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          sdk-platform: 'android-30'
-          ndk-version: '21.3.6528147'
+      - name: Build and package Android app
+        run: ./gradlew assembleRelease
 
-      - name: Build Android App
-        run: ./gradlew assembleDebug
-
-      - name: Upload Artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: android-app
-          path: app/build/outputs/apk/debug/*.apk
+          name: Android app
+          path: app/build/outputs/apk/release/app-release.apk
