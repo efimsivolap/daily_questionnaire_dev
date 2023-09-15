@@ -3,7 +3,7 @@ name: Build and upload Android app
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
