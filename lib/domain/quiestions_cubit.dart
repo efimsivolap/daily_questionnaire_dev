@@ -35,13 +35,19 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   Future<void> init() async {
     try {
       final questions = await _questionsRepository.getQuestions();
+      _countQuestions = questions.length;
+      print(questions);
+      print(_countQuestions);
       emit(QuestionsData(questions));
     } catch (e, _) {
       emit(QuestionsError(e.toString()));
     }
   }
 
-  final _answers = <String>[];
+  late final int _countQuestions;
+
+  late final List<String?> _answers =
+      List.filled(_countQuestions, null, growable: true);
 
   void changeAnswer(int index, String text) {
     _answers[index] = text;

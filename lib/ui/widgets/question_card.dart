@@ -74,7 +74,7 @@ class _QuestionCardState extends State<QuestionCard> {
                   radius: 16,
                   backgroundColor: const Color.fromRGBO(0, 186, 244, 1),
                   child: Text(
-                    widget.questionNumber.toString(),
+                    (widget.questionNumber + 1).toString(),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -117,7 +117,7 @@ class _QuestionCardState extends State<QuestionCard> {
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.bottomRight,
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
                   if (widget.question.canWriteReview) {
                     _showModalSheet(context);

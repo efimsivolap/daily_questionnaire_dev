@@ -74,7 +74,7 @@ class QuestionsWidget extends StatelessWidget {
 
               return QuestionCard(
                 question: question,
-                questionNumber: index + 1,
+                questionNumber: index,
               );
             },
           ),
