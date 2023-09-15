@@ -2,7 +2,7 @@
     {
       "title": "How was your breakfast?",
       "subtitle": "Orange Juice? Toasts? Cereals?",
-      "maxStars": 5,
+      "maxStars": 6,
       "canWriteReview": true
     },
     {
@@ -13,7 +13,7 @@
     },
     {
       "title": "Did you enjoy your morning walk?",
-      "maxStars": 4,
+      "maxStars": 3,
       "canWriteReview": false
     },
     {
@@ -22,4 +22,5 @@
       "maxStars": 5,
       "canWriteReview": true
     }
+    
 ]

@@ -1,5 +1,15 @@
-{
+[{
     "appIcon": "assets/icons/app_icon_1.png",
-    "appName": "My App",
+    "appName": "My Daily Q",
+    "accentColor": "#FF0000"
+  },
+  {
+    "appIcon": "assets/icons/app_icon_2.png",
+    "appName": "Ask me today",
+    "accentColor": "#FF0000"
+  },{
+    "appIcon": "assets/icons/app_icon_3.png",
+    "appName": "Green Day",
     "accentColor": "#FF0000"
   }
+]

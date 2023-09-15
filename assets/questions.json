@@ -13,7 +13,7 @@
     },
     {
       "title": "Did you enjoy your morning walk?",
-      "maxStars": 4,
+      "maxStars": 3,
       "canWriteReview": false
     },
     {
@@ -22,4 +22,5 @@
       "maxStars": 5,
       "canWriteReview": true
     }
+    
 ]
