@@ -40,12 +40,17 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   void _showModalSheet(BuildContext context) {
+    final questionsCubit = context.read<QuestionsCubit>();
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return ModalSheetWidget(
-          question: widget.question,
-          answerController: answerController,
+        return BlocProvider<QuestionsCubit>.value(
+          value: questionsCubit,
+          child: ModalSheetWidget(
+            question: widget.question,
+            answerController: answerController,
+          ),
         );
       },
     );
@@ -57,7 +62,6 @@ class _QuestionCardState extends State<QuestionCard> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
         border: Border.all(
           color: const Color(0xFFDBDBDB),
           width: 0.50,

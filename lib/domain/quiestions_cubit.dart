@@ -36,8 +36,6 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     try {
       final questions = await _questionsRepository.getQuestions();
       _countQuestions = questions.length;
-      print(questions);
-      print(_countQuestions);
       emit(QuestionsData(questions));
     } catch (e, _) {
       emit(QuestionsError(e.toString()));
