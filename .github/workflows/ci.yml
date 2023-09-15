@@ -4,17 +4,19 @@ on:
   push:
     branches:
       - main
-    tags:
-      - 'release/*'
 
 jobs:
   build_and_release_android:
     name: Build and Release Android App
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
 
       - name: Set up Java
         uses: actions/setup-java@v2
@@ -24,7 +26,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.4'
+          flutter-version: '2.5.x'
 
       - name: Install Dependencies
         run: flutter pub get
@@ -41,10 +43,15 @@ jobs:
   build_ios:
     name: Build iOS App
     runs-on: macos-latest
-
+    needs: build_and_release_android
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
 
       - name: Set up Java
         uses: actions/setup-java@v2
@@ -54,7 +61,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.4'
+          flutter-version: '2.5.x'
 
       - name: Install Dependencies
         run: flutter pub get
