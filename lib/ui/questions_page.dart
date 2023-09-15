@@ -59,6 +59,7 @@ class QuestionsWidget extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 14,
+                  fontFamily: 'Inter',
                   fontWeight: FontWeight.w600,
                   height: 1.43,
                 ),
