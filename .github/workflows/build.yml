@@ -1,0 +1,33 @@
+name: Build and Upload Android Application
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'release-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android application
+        run: flutter build apk
+
+      - name: Upload artifacts to GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: Android application
+          path: build/app/outputs/flutter-apk/app-release.apk

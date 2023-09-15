@@ -50,7 +50,7 @@ class QuestionsWidget extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
-                  height: 0.63,
+                  height: 0.62,
                 ),
               ),
               const SizedBox(height: 8),
