@@ -49,7 +49,6 @@ class QuestionsWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 32,
-                  fontFamily: 'Inter',
                   fontWeight: FontWeight.w600,
                   height: 0.62,
                 ),
